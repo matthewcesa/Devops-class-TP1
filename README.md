@@ -5,13 +5,13 @@ DevOps course – TP1: Reviewing Docker
 Nom de l'image de la base de données : eucko/dbtp1 
 Nom du conteneur dbtp1
  
-#### question 1-1 Pour quelle raison est-il préférable d'exécuter le conteneur avec un indicateur -e pour fournir les variables d'environnement plutôt que de les placer directement dans le Dockerfile ?
+### question 1-1 Pour quelle raison est-il préférable d'exécuter le conteneur avec un indicateur -e pour fournir les variables d'environnement plutôt que de les placer directement dans le Dockerfile ?
 Il est préférable d'exécuter le conteneur avec un indicateur -e car ainsi on peut réutiliser la même image dans différents environnements (dev, prod...) sans avoir à la reconstruire, et sans exposer de données sensibles (comme les mots de passe) directement dans le Dockerfile.
 
-#### 1-2 Pourquoi avons-nous besoin d'un volume à attacher à notre conteneur postgres ?
+### 1-2 Pourquoi avons-nous besoin d'un volume à attacher à notre conteneur postgres ?
 On a besoin de volume car ça nous permet de conserver les données même si le conteneur est supprimé ou recréé, car sans lui elles seraient perdues à chaque fois.
 
-#### 1-3 Documentez les éléments essentiels de votre conteneur de base de données : commandes et Dockerfile.
+### 1-3 Documentez les éléments essentiels de votre conteneur de base de données : commandes et Dockerfile.
 Arborescence 
 Devops-class-TP1 
         database
@@ -48,4 +48,8 @@ Et on vérifie derrière si les données ont bien été transmises en créant un
                                                                                                             --net=app-network \
                                                                                                             -p 8090:8080 \
                                                                                                             adminer
-On vérifie donc sur le localhost:8090 en se connectant à la base de données. 
+Je regarde combien de conteneur tourne avec docker ps (en l'occurence 2 ici).
+On vérifie donc sur le localhost:8090 en se connectant à la base de données et j'ai effectivement des tables quand je rentre les informations necessaires.
+
+
+
