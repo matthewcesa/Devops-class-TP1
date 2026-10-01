@@ -68,3 +68,5 @@ L'instruction RUN apk add --no-cache maven installe Maven, COPY simpleapi/pom.xm
 Dans la seconde phase d'exécution, FROM eclipse-temurin:21-jre-alpine part d'une image vierge avec uniquement le JRE 21, ENV et WORKDIR réinstallent le dossier de travail, COPY --from=myapp-build $MYAPP_HOME/target/*.jar $MYAPP_HOME/myapp.jar récupère uniquement le JAR généré, et ENTRYPOINT ["java", "-jar", "myapp.jar"] lance l'application.
 
 
+### **1-5 Why do we need a reverse proxy?**
+Un reverse proxy sert d'intermédiaire sécurisé entre les utilisateurs et votre serveur d'application. Il sert à masquer la strutcure interne du réseau pour protéger le backend et permet de rediriger le trafic ou de repartir la charge entre plusieurs serveur tout en restant le seul point d'entree visible.
