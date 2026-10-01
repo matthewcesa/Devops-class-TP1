@@ -82,6 +82,20 @@ Selon moi, les commandes les plus importantes sont :
 - docker compose build (reconstruit les images).
 
 ### **1-8 Documentez votre fichier docker-compose.**
-Le fichier `docker-compose.yml` orchestre trois services : `backend`, construit depuis `./web`, `database`, construit depuis `./database`, et `httpd`, construit depuis `./network`. Ils communiquent sur le réseau Docker `app-network` de type bridge. Le backend dépend de la base de données; Apache dépend du backend et publie le port 80 du conteneur sur le port 8080 de la machine, accessible à `http://localhost:8080`.
+Le fichier `docker-compose.yml` orchestre trois services : `backend`, construit depuis `./web`, `database`, construit depuis `./database`, et `httpd`, construit depuis `./network`. 
 
-Les identifiants PostgreSQL (`db`, `usr`, `pwd`) sont définis dans le Dockerfile de la base pour correspondre à la configuration de connexion de l'API. Le volume `db-data` est déclaré dans Compose, mais le gabarit demandé ne prévoit pas de montage `volumes` dans le service `database`; il n'est donc pas utilisé pour conserver les données.
+Ils communiquent sur le réseau Docker `app-network` de type bridge. 
+Le backend dépend de la base de données; Apache dépend du backend et publie le port 80 du conteneur sur le port 8080 de la machine, accessible à `http://localhost:8080`.
+
+Les identifiants PostgreSQL (`db`, `usr`, `pwd`) sont définis dans le Dockerfile de la base pour correspondre à la configuration de connexion de l'API.
+ Le volume `db-data` est déclaré dans Compose, mais le gabarit demandé ne prévoit pas de montage `volumes` dans le service `database`; il n'est donc pas utilisé pour conserver les données.
+
+### **1-9 Documentez vos commandes de publication et vos images publiées sur Docker Hub**
+docker login (connexion à Docker Hub), 
+docker tag devops-class-tp1-<service> eucko/<service>:1.0 (création d'un alias versionné sous ton namespace)
+docker push eucko/<service>:1.0 (téléversement vers le registre).
+Ici on remplace service par databse
+
+Images publiées : eucko/database:1.0 (PostgreSQL + scripts), eucko/backend:1.0 (API Spring Boot) et eucko/httpd:1.0 (Reverse Proxy Apache).
+
+### **1-10 Pourquoi déposons-nous nos images dans un dépôt en ligne ?**
