@@ -70,3 +70,18 @@ Dans la seconde phase d'exécution, FROM eclipse-temurin:21-jre-alpine part d'un
 
 ### **1-5 Why do we need a reverse proxy?**
 Un reverse proxy sert d'intermédiaire sécurisé entre les utilisateurs et votre serveur d'application. Il sert à masquer la strutcure interne du réseau pour protéger le backend et permet de rediriger le trafic ou de repartir la charge entre plusieurs serveur tout en restant le seul point d'entree visible.
+
+### **1-6 Pourquoi docker-compose est-il si important ?**
+Permet d'automatiser et de regrouper la gestion de plusieurs conteneurs dans un seul fichier YAML, en effet au lieu de taper plein de commandes docker run, une seule commande (docker compose up) suffit pour tout lancer, connecter et configurer en même temps. C'est une automatisation. 
+
+### **1-7 Documentation des commandes les plus importantes de docker-compose.**
+Selon moi, les commandes les plus importantes sont : 
+- docker compose up -d (demarrer en arrière-plan)
+- docker compose down (arrêter et nettoyer tout) 
+- docker compose ps (liste les services actifs)
+- docker compose build (reconstruit les images).
+
+### **1-8 Documentez votre fichier docker-compose.**
+Le fichier `docker-compose.yml` orchestre trois services : `backend`, construit depuis `./web`, `database`, construit depuis `./database`, et `httpd`, construit depuis `./network`. Ils communiquent sur le réseau Docker `app-network` de type bridge. Le backend dépend de la base de données; Apache dépend du backend et publie le port 80 du conteneur sur le port 8080 de la machine, accessible à `http://localhost:8080`.
+
+Les identifiants PostgreSQL (`db`, `usr`, `pwd`) sont définis dans le Dockerfile de la base pour correspondre à la configuration de connexion de l'API. Le volume `db-data` est déclaré dans Compose, mais le gabarit demandé ne prévoit pas de montage `volumes` dans le service `database`; il n'est donc pas utilisé pour conserver les données.
