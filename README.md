@@ -99,3 +99,4 @@ Ici on remplace service par databse
 Images publiées : eucko/database:1.0 (PostgreSQL + scripts), eucko/backend:1.0 (API Spring Boot) et eucko/httpd:1.0 (Reverse Proxy Apache).
 
 ### **1-10 Pourquoi déposons-nous nos images dans un dépôt en ligne ?**
+Déposer les images sur un registre en ligne permet de les partager entre collaborateurs, d'assurer le versioning des livrables (via les tags), de faciliter les déploiements automatisés (CI/CD) et de séparer l'étape de construction (Build) de celle d'exécution (Run).
