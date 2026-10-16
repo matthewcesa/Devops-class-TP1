@@ -1,7 +1,6 @@
 # Devops-class-TP1
 Ce TP déploie une application en trois couches avec Docker : une API Spring Boot, une base PostgreSQL initialisée par scripts SQL et un serveur Apache en reverse proxy, orchestrés avec Docker Compose.
 
-## Base de données : 
 Nom de l'image de la base de données : eucko/dbtp1 
 Nom du conteneur dbtp1
  
