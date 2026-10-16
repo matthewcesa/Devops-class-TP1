@@ -98,20 +98,11 @@ Permet d'automatiser et de regrouper la gestion de plusieurs conteneurs dans un 
 
 ### **1-7 Documentation des commandes les plus importantes de docker-compose.**
 Selon moi, les commandes les plus importantes sont : 
-- docker compose up -d (demarrer en arrière-plan)
-- docker compose down (arrêter et nettoyer tout) 
-- docker compose ps (liste les services actifs)
-- docker compose build (reconstruit les images).
-```sh
-docker compose config                 # valider le fichier compose
-docker compose build                  # construire les images
-docker compose up -d                  # demarrer les services en arrière-plan
-docker compose up -d --build          # reconstruire puis démarrer
-docker compose ps                     # voir l'état des services
-docker compose logs -f                # suivre tous les journaux
-docker compose logs -f backend        # suivre les journaux du backend
-docker compose exec database psql -U usr -d db -c '\\dt'
-docker compose down                   # arreter et supprimer les conteneurs/réseaux
+```
+docker compose up -d (demarrer en arrière-plan)
+docker compose down (arrêter et nettoyer tout) 
+docker compose ps (liste les services actifs)
+docker compose build (reconstruit les images)
 ```
 
 ### **1-8 Documentez votre fichier docker-compose.**
