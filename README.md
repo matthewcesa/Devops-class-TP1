@@ -12,15 +12,22 @@ Il est préférable d'exécuter le conteneur avec un indicateur -e car ainsi on 
 On a besoin de volume car ça nous permet de conserver les données même si le conteneur est supprimé ou recréé, car sans lui elles seraient perdues à chaque fois.
 
 ### ** question 1-3 Documentez les éléments essentiels de votre conteneur de base de données : commandes et Dockerfile. **
-Arborescence 
-Devops-class-TP1 
-        database
-                CreateScheme.sql
-                InsertData.sql
-                DockerFile
-        network
-        web
-        README.md
+Arborescence :
+```text
+Devops-class-TP1/
+├── docker-compose.yml
+├── README.md
+├── database/
+│   ├── Dockerfile
+│   └── init-db/
+│       ├── CreateScheme.sql
+│       └── InsertData.sql
+├── network/
+│   ├── Dockerfile
+│   ├── httpd.conf
+│   └── index.html
+└── web/..
+```
 
 Les fichiers .sql sont des fichiers d'initialisation. 
 
@@ -39,16 +46,20 @@ Ensuite on a créé le réseau : docker network create app-network
 On a construit l'image Docker : docker build -t dbtp1 ./database
 Ensuite, on créé et lance le conteneur : 
 ```
-Docker run -d \
---name dbtp1 \  
---net=app-network \
+docker run -d \\
+--name dbtp1 \\
+--network app-network \\
 -e POSTGRES_DB=db \
 -e POSTGRES_USER=usr \
 -e POSTGRES_PASSWORD=pwd \
 -v my-db-data:/var/lib/postgresql/data \
 dbtp1
 ```
+On vérifie ensuite les journaux et les tables créées :
+```sh
+docker logs dbtp1
 Et on vérifie derrière si les données ont bien été transmises en créant un nouveau conteneur avec Adminer : 
+```
 ```
 docker run -d \
 --name adminer \
@@ -80,6 +91,17 @@ Selon moi, les commandes les plus importantes sont :
 - docker compose down (arrêter et nettoyer tout) 
 - docker compose ps (liste les services actifs)
 - docker compose build (reconstruit les images).
+```sh
+docker compose config                 # valider le fichier compose
+docker compose build                  # construire les images
+docker compose up -d                  # demarrer les services en arrière-plan
+docker compose up -d --build          # reconstruire puis démarrer
+docker compose ps                     # voir l'état des services
+docker compose logs -f                # suivre tous les journaux
+docker compose logs -f backend        # suivre les journaux du backend
+docker compose exec database psql -U usr -d db -c '\\dt'
+docker compose down                   # arreter et supprimer les conteneurs/réseaux
+```
 
 ### **1-8 Documentez votre fichier docker-compose.**
 Le fichier `docker-compose.yml` orchestre trois services : `backend`, construit depuis `./web`, `database`, construit depuis `./database`, et `httpd`, construit depuis `./network`. 
@@ -91,12 +113,17 @@ Les identifiants PostgreSQL (`db`, `usr`, `pwd`) sont définis dans le Dockerfil
  Le volume `db-data` est déclaré dans Compose, mais le gabarit demandé ne prévoit pas de montage `volumes` dans le service `database`; il n'est donc pas utilisé pour conserver les données.
 
 ### **1-9 Documentez vos commandes de publication et vos images publiées sur Docker Hub**
-docker login (connexion à Docker Hub), 
-docker tag devops-class-tp1-<service> eucko/<service>:1.0 (création d'un alias versionné sous ton namespace)
-docker push eucko/<service>:1.0 (téléversement vers le registre).
-Ici on remplace service par databse
+```sh
+docker login
+docker build -t eucko/database ./database
+docker build -t eucko/backend ./web
+docker build -t eucko/httpd: ./network
+docker push eucko/database
+docker push eucko/backend
+docker push eucko/httpd
+```
 
-Images publiées : eucko/database:1.0 (PostgreSQL + scripts), eucko/backend:1.0 (API Spring Boot) et eucko/httpd:1.0 (Reverse Proxy Apache).
+Images publiées : eucko/database (PostgreSQL + scripts), eucko/backen: (API Spring Boot) et eucko/httpd:1.0 (Reverse Proxy Apache).
 
 ### **1-10 Pourquoi déposons-nous nos images dans un dépôt en ligne ?**
 Déposer les images sur un registre en ligne permet de les partager entre collaborateurs, d'assurer le versioning des livrables (via les tags), de faciliter les déploiements automatisés (CI/CD) et de séparer l'étape de construction (Build) de celle d'exécution (Run).

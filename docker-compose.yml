@@ -1,17 +1,19 @@
 services:
-  backend:
+  backend: # se connecte avec la db a travers backend network
+            #se connecte avec le front avec app netowrk
     build: ./web
     networks:
       - app-network
+      - backend-network
     depends_on:
       - database
 
-  database:
+  database: #se connecte qu'avec le back end a travers backend-network
     build: ./database
     networks:
-      - app-network
+      - backend-network
 
-  httpd:
+  httpd: #se connecte qu'avec le backend a travers app-network
     build: ./network
     ports:
       - "80:80"
@@ -20,9 +22,11 @@ services:
     depends_on:
       - backend
 
-networks:
+networks: #permet de communiquer, isoler la db du front (les conteneurs ne doivent pas tous se comuniquer entre eux)
   app-network:
-    driver: bridge
+  backend-network: 
+
+  
 
 volumes:
   db-data: {}
