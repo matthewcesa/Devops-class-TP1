@@ -73,9 +73,21 @@ On vérifie donc sur le localhost:8090 en se connectant à la base de données e
 
 ### ** question 1-4 Pourquoi avons-nous besoin d'une construction en plusieurs étapes ? Et expliquez chaque étape de ce dockerfile. ** 
 Le build multi-stage est important pour réduire la taille de l'image finale en ne gardant que le JRE léger et le fichier JAR, ce qui améliore la sécurité en retirant le code source et le JDK, tout en garantissant un build reproductible.
-Dans la première phase de build, FROM eclipse-temurin:21-jdk-alpine AS myapp-build lance une image avec JDK 21, puis ENV MYAPP_HOME=/opt/myapp et WORKDIR $MYAPP_HOME créent et définissent le dossier de travail. 
-L'instruction RUN apk add --no-cache maven installe Maven, COPY simpleapi/pom.xml . et COPY simpleapi/src ./src copient la configuration et les sources, puis RUN mvn clean package -DskipTests compile le projet en fichier JAR.   
-Dans la seconde phase d'exécution, FROM eclipse-temurin:21-jre-alpine part d'une image vierge avec uniquement le JRE 21, ENV et WORKDIR réinstallent le dossier de travail, COPY --from=myapp-build $MYAPP_HOME/target/*.jar $MYAPP_HOME/myapp.jar récupère uniquement le JAR généré, et ENTRYPOINT ["java", "-jar", "myapp.jar"] lance l'application.
+
+Dans la première phase de build, 
+```FROM eclipse-temurin:21-jdk-alpine AS myapp-build```
+lance une image avec JDK 21, 
+puis ```ENV MYAPP_HOME=/opt/myapp```  et ```WORKDIR $MYAPP_HOME```  
+créent et définissent le dossier de travail. 
+L'instruction ```RUN apk add --no-cache maven``` installe Maven, ```COPY simpleapi/pom.xml``` . et ```COPY simpleapi/src ./src``` copient la configuration et les sources, puis ```RUN mvn clean package -DskipTests ``` compile le projet en fichier JAR.   
+
+
+Dans la seconde phase d'exécution, 
+```FROM eclipse-temurin:21-jre-alpine```part d'une image vierge avec uniquement le JRE 21, ``ENV`` et ``WORKDIR`` réinstallent le dossier de travail, 
+```COPY --from=myapp-build $MYAPP_HOME/target/*.jar $MYAPP_HOME/myapp.jar```
+ récupère uniquement le JAR généré, et 
+ ```ENTRYPOINT ["java", "-jar", "myapp.jar"]```
+  lance l'application.
 
 
 ### **1-5 Why do we need a reverse proxy?**
